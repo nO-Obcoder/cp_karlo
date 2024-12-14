@@ -78,70 +78,71 @@ Miles to go before I sleep.
 // }
 
 
-#include <bits/stdc++.h>
+#include <map>
+#include <iostream>
 using namespace std;
 
+//don't use unordered map -> will get tle
+long long optimal_using_prefix_sum_concept(long long arr[],long long n,long long k){
+
+	long long count=0,prefix_sum=0;
+	map<long long,long long>mp;
+	mp[prefix_sum]++;
+	for(long long i=0;i<n;i++){
+		prefix_sum+=arr[i];
+
+		//calucate x-k
+		long long remove = prefix_sum - k;
+
+		// Add the number of subarrays to be removed:
+		count+=mp[remove];
+
+		
+		// Update the count of prefix sum
+		mp[prefix_sum]+= 1;
+	}
+
+	return count;
+}
+
+
+// long long brute(long long arr[],long long n,long long s){
+// 	long long count=0;
+
+// 	for(long long i=0;i<n;i++){
+// 		long long sum=0;
+// 		for(long long j=i;j<n;j++){
+// 			sum+=arr[j];
+
+// 			if(sum == s)
+// 				count++;
+// 		}
+// 	}
+
+// 	return count;
+// }
 
 
 void solve() {
-	long long n,q;
-	cin>>n>>q;
+	long long n,s;
+	cin>>n>>s;
 
-	//compute prefix sum
-	long long prefix_sum[n+1][n+1];
+	long long arr[n];
+	for(long long i=0;i<n;i++)
+		cin>>arr[i];
 
+	//cout<<brute(arr,n,s)<<"\n";
+	cout<<optimal_using_prefix_sum_concept(arr,n,s)<<"\n";
 
-	char arr[n+1][n+1];
-	for(long long i=1;i<=n;i++){
-		for(long long j=1;j<=n;j++){
-			cin>>arr[i][j];
-			if(arr[i][j] == '*')
-				prefix_sum[i][j] = 1;
-			else
-				prefix_sum[i][j] = 0;
-		}
-	}
-
-
-
-	for(long long i=1;i<=n;i++){
-		for(long long j=1;j<=n;j++){
-
-			if(i>=2)
-			 	prefix_sum[i][j]+= prefix_sum[i-1][j];
-
-			 if(j>=2)
-			 	prefix_sum[i][j]+=prefix_sum[i][j-1];
-
-			 if(i>=2 && j>=2)
-			 	prefix_sum[i][j]-= prefix_sum[i-1][j-1];
-
-		} 
-	}
-	
-
-	while(q--){
-		int x1,y1,x2,y2;
-		cin>>x1>>y1>>x2>>y2;
-		long long ans=prefix_sum[x2][y2];
-
-		if(x1>=2)
-			ans-=prefix_sum[x1-1][y2];
-		if(y1>=2)
-			ans-=prefix_sum[x2][y1-1];
-		if(x1>=2 && y1>=2)
-			ans+=prefix_sum[x1-1][y1-1];
-		cout<<ans<<"\n";
-	}
 }
 
 int32_t main()
 {
 
-	int t=1;
-	//cin >> t;
-	while (t--) solve();
-
+	// int t=1;
+	// //cin >> t;
+	// while (t--) solve();
+	solve();
 	return 0;
 }
 

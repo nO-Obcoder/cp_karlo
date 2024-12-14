@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maximumPopulation(vector<vector<int>>& logs) {
+        map<int,int>mp;
+        for(auto log: logs){
+            mp[log[0]]++;
+
+            for(int i=log[0]+1;i<log[1];i++)
+                mp[i]++;
+        }
+
+
+        int year=0,maxp=INT_MIN;
+        for(auto ele: mp){
+            if(ele.second > 0 && ele.second>maxp){
+                year = ele.first;
+                maxp = max(ele.second,maxp);
+            }
+        }
+        return year;
+    }
+};

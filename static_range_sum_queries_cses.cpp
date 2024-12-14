@@ -82,57 +82,37 @@ Miles to go before I sleep.
 #include <iostream>
 using namespace std;
 
-//don't use unordered map -> will get tle
-long long optimal_using_prefix_sum_concept(long long arr[],long long n,long long k){
 
-	long long count=0,prefix_sum=0;
-	map<long long,long long>mp;
-	mp[prefix_sum]++;
-	for(long long i=0;i<n;i++){
-		prefix_sum+=arr[i];
+// long long brute(long long arr[],long long n,long long s,long long e){
+// 	long long sum=0;
 
-		//calucate x-k
-		long long remove = prefix_sum - k;
-
-		// Add the number of subarrays to be removed:
-		count+=mp[remove];
-
-		
-		// Update the count of prefix sum
-		mp[prefix_sum]+= 1;
-	}
-
-	return count;
-}
-
-
-// long long brute(long long arr[],long long n,long long s){
-// 	long long count=0;
-
-// 	for(long long i=0;i<n;i++){
-// 		long long sum=0;
-// 		for(long long j=i;j<n;j++){
-// 			sum+=arr[j];
-
-// 			if(sum == s)
-// 				count++;
-// 		}
+// 	for(long long i=s-1;i<=(e-1);i++){
+// 		sum+=arr[i];
 // 	}
 
-// 	return count;
+// 	return sum;
 // }
 
 
 void solve() {
-	long long n,s;
-	cin>>n>>s;
+	long long n,q;
+	cin>>n>>q;
 
 	long long arr[n];
-	for(long long i=0;i<n;i++)
+	long long prefix_sum[n];
+	
+	prefix_sum[0]=arr[0];
+	for(long long i=0;i<n;i++){
 		cin>>arr[i];
+		prefix_sum[i]=arr[i] + prefix_sum[i-1];
+	}
 
-	//cout<<brute(arr,n,s)<<"\n";
-	cout<<optimal_using_prefix_sum_concept(arr,n,s)<<"\n";
+	while(q--){
+		long long s,e;
+		cin>>s>>e;
+		// cout<<brute(arr,n,s,e)<<"\n";
+		cout<<( (prefix_sum[e-1]- prefix_sum[s-1]) + arr[s-1])<<"\n";
+	}
 
 }
 
